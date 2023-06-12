@@ -14,6 +14,7 @@ const adminRoutes = require( './routes/adminRoutes.js')
 const teacherRoutes = require( './routes/teacherRoutes.js')
 const staffRoutes = require( './routes/staffRoutes.js')
 const cors = require('cors')
+const { createProxyMiddleware } = require('http-proxy-middleware');
 // const items = require('./data/Data')
 // const classes = require('./data/ClassData')
 // d0t
@@ -21,17 +22,26 @@ dotenv.config()
 connectDB()
 const app = express()
 app.use(express.json())
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors())
 app.get('/dashboard', async (req, res) => {
   const items = await Dashboard.find()
   console.log(items)
   res.json(items)
 })
 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/api': '', // Remove the /api prefix from the request URL
+    },
+    onProxyRes(proxyRes) {
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+    },
+  })
+);
 app.use('/api/students', studentRoutes)
 app.use('/api/login', adminRoutes)
 app.use('/api/teachers', teacherRoutes)
