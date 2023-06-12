@@ -22,26 +22,14 @@ dotenv.config()
 connectDB()
 const app = express()
 app.use(express.json())
-app.use(cors())
+app.use(cors({origin:"*"}))
+
 app.get('/dashboard', async (req, res) => {
   const items = await Dashboard.find()
   console.log(items)
   res.json(items)
 })
 
-app.use(
-  '/api',
-  createProxyMiddleware({
-    target: 'http://localhost:3000',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/api': '', // Remove the /api prefix from the request URL
-    },
-    onProxyRes(proxyRes) {
-      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-    },
-  })
-);
 app.use('/api/students', studentRoutes)
 app.use('/api/login', adminRoutes)
 app.use('/api/teachers', teacherRoutes)
