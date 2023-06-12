@@ -13,8 +13,6 @@ const studentRoutes = require( './routes/studentRoutes.js')
 const adminRoutes = require( './routes/adminRoutes.js')
 const teacherRoutes = require( './routes/teacherRoutes.js')
 const staffRoutes = require( './routes/staffRoutes.js')
-const cors = require('cors')
-const { createProxyMiddleware } = require('http-proxy-middleware');
 // const items = require('./data/Data')
 // const classes = require('./data/ClassData')
 // d0t
@@ -22,7 +20,6 @@ dotenv.config()
 connectDB()
 const app = express()
 app.use(express.json())
-app.use(cors({origin:"*"}))
 
 app.get('/dashboard', async (req, res) => {
   const items = await Dashboard.find()
