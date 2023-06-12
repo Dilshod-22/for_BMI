@@ -28,10 +28,24 @@ const adminSchema = mongoose.Schema(
     timestamps: true,
   }
 )
-adminSchema.methods.matchPassword = async function (enteredPassword) {
-  console.log('reached here')
-  return await bcrypt.compare(enteredPassword, this.password)
+
+adminSchema.pre('save', async function(next){
+  if(!this.isModified('password')){
+      next()
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  this.password = bcrypt.hashSync(this.password, salt)
+})
+
+adminSchema.methods.matchPassword = async function(enterPass){
+  return await bcrypt.compare(this.password, enterPass)
 }
+
+adminSchema.methods.hashingPassword = async(enterPass) => {
+  return bcrypt.hashSync(enterPass, 10)
+}
+
 const Admin = mongoose.model('Admin', adminSchema)
 
 module.exports = Admin
