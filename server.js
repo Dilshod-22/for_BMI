@@ -14,6 +14,7 @@ const adminRoutes = require( './routes/adminRoutes.js')
 const teacherRoutes = require( './routes/teacherRoutes.js')
 const staffRoutes = require( './routes/staffRoutes.js')
 // const items = require('./data/Data')
+const cors = require("cors")
 // const classes = require('./data/ClassData')
 // d0t
 dotenv.config()
@@ -26,6 +27,10 @@ app.get('/dashboard', async (req, res) => {
   console.log(items)
   res.json(items)
 })
+app.use(cors({
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}));
 
 app.use('/api/students', studentRoutes)
 app.use('/api/login', adminRoutes)
