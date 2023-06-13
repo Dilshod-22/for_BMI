@@ -19,7 +19,6 @@ router.post(
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        image: user.image,
         token: generateToken(user._id),
       })
     } else {
