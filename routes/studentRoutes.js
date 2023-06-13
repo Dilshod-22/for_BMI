@@ -76,7 +76,6 @@ router.post(
   '/register',
   //the protect used here is used for getting the id of the admin who registered the student
 
-  protect,
   asyncHandler(async (req, res) => {
     const {
       student_name,
@@ -90,7 +89,6 @@ router.post(
       age,
       email,
       registration_fees,
-      image,
     } = req.body
     // const student_info =
     const student_info =
@@ -129,7 +127,6 @@ router.post(
       previous_dues,
       registration_fees,
 
-      image,
     })
     console.log(new_student)
     if (new_student) {
@@ -157,7 +154,6 @@ router.post(
 //following route is for attendance of students
 router.post(
   '/attendance/:classname',
-  protect,
   asyncHandler(async (req, res) => {
     // const students = await Student.find({})
     const { students } = req.body
@@ -221,7 +217,6 @@ router.delete(
 
 router.post(
   '/fees/:id',
-  protect,
   asyncHandler(async (req, res) => {
     const {
       student_name,
